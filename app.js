@@ -9,10 +9,11 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə
+// 1. Ana Səhifə (ID-lər mətn kimi çəkilir ki JavaScript yuvarlaqlaşdırmasın)
 app.get('/', async (req, res) => {
     try {
-        const { data: songs, error } = await supabase.from('songs').select('*');
+        // id::text yazaraq ID-ni rəqəm kimi yox, birbaşa string kimi alırıq!
+        const { data: songs, error } = await supabase.from('songs').select('id::text, artist, song, hashtag, lyrics');
         
         let artistMap = {};
         if (!error && songs) {
@@ -32,12 +33,12 @@ app.get('/', async (req, res) => {
     }
 });
 
-// 2. Axtarış və Klikləmə
+// 2. Axtarış və Klikləmə (ID-lər string formatında saxlanılır)
 app.get('/search', async (req, res) => {
     try {
         const searchWord = (req.query.search || '').trim();
         
-        const { data: songs } = await supabase.from('songs').select('*');
+        const { data: songs } = await supabase.from('songs').select('id::text, artist, song, hashtag, lyrics');
         let artistMap = {};
         if (songs) {
             songs.forEach(s => {
@@ -54,9 +55,10 @@ app.get('/search', async (req, res) => {
         let selectedArtist = "";
 
         if (searchWord) {
+            // Axtarış zamanı da ID-ni string-ə çevirib gətiririk
             const { data: foundSongs } = await supabase
                 .from('songs')
-                .select('*')
+                .select('id::text, artist, song, hashtag, lyrics')
                 .or(`artist.ilike.%${searchWord}%,song.ilike.%${searchWord}%`);
 
             if (foundSongs && foundSongs.length > 0) {
@@ -95,7 +97,7 @@ app.post('/add-song', async (req, res) => {
     }
 });
 
-// 4. Redaktə (ID birbaşa mətn kimi göndərilir - ZƏMANƏTLİ)
+// 4. Redaktə (Düzgün ID-yə görə nöqtə atışı update)
 app.post('/edit-song', async (req, res) => {
     try {
         const { id, artist, song, hashtag, lyrics } = req.body;
@@ -108,7 +110,7 @@ app.post('/edit-song', async (req, res) => {
                     hashtag: hashtag ? hashtag.trim() : null,
                     lyrics: lyrics ? lyrics.trim() : null
                 })
-                .eq('id', id); // Heç bir parseInt yoxdur, birbaşa string gedir
+                .eq('id', id); // String ID ilə Supabase tam eşləşir
         }
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
@@ -117,7 +119,7 @@ app.post('/edit-song', async (req, res) => {
     }
 });
 
-// 5. Silmə (ID birbaşa mətn kimi göndərilir - ZƏMANƏTLİ)
+// 5. Silmə (Düzgün ID-yə görə nöqtə atışı delete)
 app.post('/delete-song', async (req, res) => {
     try {
         const { id, artist } = req.body;
@@ -125,7 +127,7 @@ app.post('/delete-song', async (req, res) => {
             await supabase
                 .from('songs')
                 .delete()
-                .eq('id', id);
+                .eq('id', id); // String ID ilə birbaşa silinir
         }
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
