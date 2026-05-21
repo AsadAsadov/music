@@ -10,33 +10,31 @@
         
         /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 6px 12px; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 8px; }
-        .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; }
+        .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .search-form { display: flex; gap: 4px; }
-        input[type="text"] { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 3px 6px; font-size: 11px; border-radius: 4px; width: 130px; }
-        button { background: var(--accent); color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        input[type="text"] { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 4px 8px; font-size: 11px; border-radius: 4px; width: 130px; }
+        button { background: var(--accent); color: white; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-add { background: var(--green); }
+        .btn-back { background: #21262d; border: 1px solid #30363d; color: var(--text); text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: none; }
 
-        /* Əsas Layout: 2 Sütunlu Kompakt Ekran (Skrolsuz fəlsəfə) */
+        /* Əsas Layout: Responsive 2 Sütun */
         .main-container { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        @media (min-width: 768px) {
-            .main-container { grid-template-columns: 350px 1fr; align-items: start; }
-        }
+        
+        .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; box-sizing: border-radius; }
+        .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
 
-        .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
-        .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Artist Grid - Skrol etmədən ekranda sıx yerləşmə */
-        .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 4px; max-height: 82vh; overflow-y: auto; padding-right: 4px; }
-        .artist-card { background: #161b22; border: 1px solid #21262d; padding: 4px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 32px; transition: 0.15s; }
+        /* Artist Grid */
+        .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 4px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
+        .artist-card { background: #161b22; border: 1px solid #21262d; padding: 5px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 34px; transition: 0.15s; box-sizing: border-box; }
         .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
         .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
 
-        /* Mahnı Kartları - Grid və ya Sürüşən */
-        .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
-        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        /* Mahnı Kartları - Sıx Grid Sistemi */
+        .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
+        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 48px; }
         .song-title { font-size: 11px; font-weight: bold; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
+        .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         /* Modal */
@@ -46,19 +44,44 @@
         .modal-content input { width: 93%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
 
-        /* Özəlləşdirilmiş skrol bar */
+        /* Skrol dizaynı */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+
+        /* 🖥️ Ekran Böyük olanda (PC versiya) */
+        @media (min-width: 768px) {
+            .main-container { grid-template-columns: 360px 1fr; align-items: start; }
+            .left-box { display: block !important; }
+            .right-box { display: block !important; }
+        }
+
+        /* 📱 Ekran Kiçik olanda (Mobil Uyumlu Adaptasiya) */
+        @media (max-width: 767px) {
+            input[type="text"] { width: 100px; }
+            .brand span { display: none; } /* Mobildə yazını gizlədirik, yalnız ikon qalır */
+            
+            <% if (selectedArtist) { %>
+                .left-box { display: none !important; } /* Artist seçilibsə sol paneli gizlət */
+                .right-box { display: block !important; } /* Yalnız sağ paneli göstər */
+                .btn-back { display: inline-block; margin-right: 6px; } /* Geri düyməsini aktiv et */
+            <% } else { %>
+                .left-box { display: block !important; }
+                .right-box { display: none !important; }
+            <% } %>
+        }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <a href="/" class="brand">🎵 Selnet Music</a>
+        <div style="display: flex; align-items: center;">
+            <a href="/" class="btn-back">⬅ Geri</a>
+            <a href="/" class="brand">🎵 <span>Selnet Music</span></a>
+        </div>
         <div style="display: flex; gap: 4px;">
             <form action="/search" method="GET" class="search-form">
-                <input type="text" name="search" value="<%= searchWord %>" placeholder="Müğənni adı..." autocomplete="off" autofocus>
+                <input type="text" name="search" value="<%= searchWord %>" placeholder="Artist adı..." autocomplete="off">
                 <button type="submit">Ara</button>
             </form>
             <button class="btn-add" onclick="openModal()">+ Əlavə Et</button>
@@ -67,11 +90,11 @@
 
     <div class="main-container">
         
-        <div class="panel-box">
+        <div class="panel-box left-box">
             <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
             <div class="artist-grid">
                 <% artists.forEach(art => { %>
-                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist === art.name ? 'active' : '' %>">
+                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= (selectedArtist && selectedArtist.toLowerCase() === art.name.toLowerCase()) ? 'active' : '' %>">
                         <span class="artist-name"><%= art.name %></span>
                         <span class="artist-count">🎵 <%= art.count %> mahnı</span>
                     </a>
@@ -79,27 +102,29 @@
             </div>
         </div>
 
-        <div class="panel-box" style="min-height: 150px;">
+        <div class="panel-box right-box">
             <% if (selectedArtist) { %>
-                <div class="section-title" style="color: #fff;">
-                    🔥 "<%= selectedArtist %>" nəticələri (<%= artistSongs.length %>)
+                <div class="section-title" style="color: #fff; border-bottom: 1px solid #21262d; padding-bottom: 4px; margin-bottom: 8px;">
+                    <span>🔥 <%= selectedArtist %> (<%= artistSongs.length %>)</span>
                 </div>
                 
                 <div class="song-container">
                     <% if (artistSongs.length > 0) { %>
                         <% artistSongs.forEach(song => { %>
                             <div class="song-card">
-                                <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
-                                <div class="song-artist">🎤 <%= song.artist %></div>
+                                <div>
+                                    <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
+                                    <div class="song-artist">🎤 <%= song.artist %></div>
+                                </div>
                                 <div class="song-hashtag" title="<%= song.hashtag %>"><%= song.hashtag || '#yoxdur' %></div>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Bu müğənniyə aid mahnı tapılmadı.</div>
+                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Bu artistə aid mahnı tapılmadı.</div>
                     <% } %>
                 </div>
             <% } else { %>
-                <div style="color: #8b949e; text-align: center; padding-top: 40px; font-size: 12px;">
+                <div style="color: #8b949e; text-align: center; padding-top: 60px; font-size: 11px;">
                     Siyahıdan bir artist seçin və ya yuxarıdan axtarış edin.
                 </div>
             <% } %>
