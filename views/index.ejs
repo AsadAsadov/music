@@ -9,84 +9,103 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; font-size: 11px; }
         
         /* Navbar */
-        .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 8px 12px; border-radius: 6px; border: 1px solid #21262d; margin-bottom: 10px; }
-        .brand { font-size: 13px; font-weight: bold; color: #fff; text-decoration: none; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 6px 12px; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 8px; }
+        .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; }
         .search-form { display: flex; gap: 4px; }
-        input[type="text"] { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 4px 8px; font-size: 11px; border-radius: 4px; width: 140px; }
-        button { background: var(--accent); color: white; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        input[type="text"] { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 3px 6px; font-size: 11px; border-radius: 4px; width: 130px; }
+        button { background: var(--accent); color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-add { background: var(--green); }
 
-        /* Artistlər - Yan-yana sürüşən lent (Horizontal Scroll) */
-        .section-title { font-size: 12px; margin: 5px 0; color: #fff; font-weight: 600; }
-        .artist-carousel { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .artist-carousel::-webkit-scrollbar { display: none; }
-        .artist-card { background: var(--card-bg); border: 1px solid #30363d; padding: 6px 10px; border-radius: 6px; text-decoration: none; color: var(--text); min-width: 80px; text-align: center; white-space: nowrap; transition: 0.2s; }
-        .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
-        .artist-card div { font-weight: bold; color: #fff; }
-        .artist-card span { color: #8b949e; font-size: 10px; }
-
-        /* Mahnı Kartları Konteyneri - Sağa sola sürüşən */
-        .song-carousel { display: flex; gap: 10px; overflow-x: auto; padding: 5px 0; snap-type: x mandatory; scrollbar-width: thin; }
-        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 10px; border-radius: 6px; min-width: 180px; max-width: 180px; snap-align: start; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; }
-        .song-title { font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .song-artist { color: #8b949e; margin-bottom: 6px; }
-        .song-hashtag { color: #58a6ff; font-style: italic; font-size: 10px; word-break: break-word; }
-
-        /* Modal (Mahnı Əlavə Etmə paneli) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 8px; width: 260px; }
-        .modal-content h3 { margin-top: 0; color: #fff; font-size: 12px; }
-        .modal-content input { width: 92%; margin-bottom: 8px; display: block; padding: 6px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 5px; }
-
-        @media (max-width: 600px) {
-            input[type="text"] { width: 100px; }
+        /* Əsas Layout: 2 Sütunlu Kompakt Ekran (Skrolsuz fəlsəfə) */
+        .main-container { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 768px) {
+            .main-container { grid-template-columns: 350px 1fr; align-items: start; }
         }
+
+        .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
+        .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Artist Grid - Skrol etmədən ekranda sıx yerləşmə */
+        .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 4px; max-height: 82vh; overflow-y: auto; padding-right: 4px; }
+        .artist-card { background: #161b22; border: 1px solid #21262d; padding: 4px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 32px; transition: 0.15s; }
+        .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
+        .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
+
+        /* Mahnı Kartları - Grid və ya Sürüşən */
+        .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .song-title { font-size: 11px; font-weight: bold; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
+        .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 240px; }
+        .modal-content h3 { margin-top: 0; color: #fff; font-size: 11px; margin-bottom: 8px; }
+        .modal-content input { width: 93%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
+
+        /* Özəlləşdirilmiş skrol bar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0d1117; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
         <a href="/" class="brand">🎵 Selnet Music</a>
-        <div style="display: flex; gap: 6px;">
+        <div style="display: flex; gap: 4px;">
             <form action="/search" method="GET" class="search-form">
-                <input type="text" name="search" value="<%= searchWord %>" placeholder="Artist axtar..." autocomplete="off">
+                <input type="text" name="search" value="<%= searchWord %>" placeholder="Müğənni adı..." autocomplete="off" autofocus>
                 <button type="submit">Ara</button>
             </form>
             <button class="btn-add" onclick="openModal()">+ Əlavə Et</button>
         </div>
     </div>
 
-    <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
-    <div class="artist-carousel">
-        <% artists.forEach(art => { %>
-            <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist === art.name ? 'active' : '' %>">
-                <div><%= art.name %></div>
-                <span>🎤 <%= art.count %> mahnı</span>
-            </a>
-        <% }) %>
-    </div>
-
-    <% if (selectedArtist) { %>
-        <div class="section-title" style="margin-top: 15px;">
-            🔥 "<%= selectedArtist %>" üçün nəticələr (<%= artistSongs.length %> mahnı)
-        </div>
+    <div class="main-container">
         
-        <div class="song-carousel">
-            <% if (artistSongs.length > 0) { %>
-                <% artistSongs.forEach(song => { %>
-                    <div class="song-card">
-                        <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
-                        <div class="song-artist">🎤 <%= song.artist %></div>
-                        <div class="song-hashtag"><%= song.hashtag || '#yoxdur' %></div>
-                    </div>
+        <div class="panel-box">
+            <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
+            <div class="artist-grid">
+                <% artists.forEach(art => { %>
+                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist === art.name ? 'active' : '' %>">
+                        <span class="artist-name"><%= art.name %></span>
+                        <span class="artist-count">🎵 <%= art.count %> mahnı</span>
+                    </a>
                 <% }) %>
+            </div>
+        </div>
+
+        <div class="panel-box" style="min-height: 150px;">
+            <% if (selectedArtist) { %>
+                <div class="section-title" style="color: #fff;">
+                    🔥 "<%= selectedArtist %>" nəticələri (<%= artistSongs.length %>)
+                </div>
+                
+                <div class="song-container">
+                    <% if (artistSongs.length > 0) { %>
+                        <% artistSongs.forEach(song => { %>
+                            <div class="song-card">
+                                <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
+                                <div class="song-artist">🎤 <%= song.artist %></div>
+                                <div class="song-hashtag" title="<%= song.hashtag %>"><%= song.hashtag || '#yoxdur' %></div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Bu müğənniyə aid mahnı tapılmadı.</div>
+                    <% } %>
+                </div>
             <% } else { %>
-                <p style="color: #f85149; padding: 10px;">Bu artistə aid mahnı tapılmadı.</p>
+                <div style="color: #8b949e; text-align: center; padding-top: 40px; font-size: 12px;">
+                    Siyahıdan bir artist seçin və ya yuxarıdan axtarış edin.
+                </div>
             <% } %>
         </div>
-        <small style="color: #8b949e; display: block; margin-top: 4px;">← Mobil cihazlarda sağa-sola sürüşdürün →</small>
-    <% } %>
+
+    </div>
 
     <div id="addModal" class="modal">
         <div class="modal-content">
@@ -94,7 +113,7 @@
             <form action="/add-song" method="POST">
                 <input type="text" name="artist" placeholder="Müğənni adı (Məs: Tarkan)" required>
                 <input type="text" name="song" placeholder="Mahnı adı" required>
-                <input type="text" name="hashtag" placeholder="#tarkan #pop #hit">
+                <input type="text" name="hashtag" placeholder="#hashtag #lar">
                 <div class="modal-actions">
                     <button type="button" style="background: #da3637;" onclick="closeModal()">Ləğv et</button>
                     <button type="submit">Yadda saxla</button>
