@@ -8,47 +8,44 @@
         :root { --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.8); --text: #c9d1d9; --accent: #58a6ff; --green: #2ea44f; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; font-size: 11px; }
         
-        /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 6px 12px; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 8px; }
         .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .search-form { display: flex; gap: 4px; }
         input[type="text"], textarea { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 4px 8px; font-size: 11px; border-radius: 4px; width: 130px; box-sizing: border-box; }
-        textarea { width: 93%; height: 60px; resize: none; margin-bottom: 6px; font-family: inherit; }
+        textarea { width: 100%; height: 70px; resize: none; margin-bottom: 6px; font-family: inherit; }
         button { background: var(--accent); color: white; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-add { background: var(--green); }
         .btn-back { background: #21262d; border: 1px solid #30363d; color: var(--text); text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: none; }
 
-        /* Əsas Layout */
         .main-container { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
         .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Artist Grid */
         .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 4px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
         .artist-card { background: #161b22; border: 1px solid #21262d; padding: 5px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 34px; transition: 0.15s; box-sizing: border-box; }
         .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
         .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
 
-        /* Mahnı Kartları */
         .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
-        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 48px; cursor: pointer; transition: 0.2s; }
-        .song-card:hover { border-color: var(--accent); background: #1f242c; }
+        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 52px; position: relative; }
+        .song-info-click { cursor: pointer; flex-grow: 1; width: 85%; }
         .song-title { font-size: 11px; font-weight: bold; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
         .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* Edit Düyməsi */
+        .btn-edit-trigger { position: absolute; top: 6px; right: 6px; background: rgba(48, 54, 61, 0.6); border: 1px solid #30363d; border-radius: 4px; padding: 2px 5px; font-size: 10px; color: #8b949e; cursor: pointer; z-index: 5; transition: 0.15s; }
+        .btn-edit-trigger:hover { color: var(--accent); border-color: var(--accent); background: #161b22; }
 
-        /* Modallar (Popup Box) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; padding: 10px; box-sizing: border-box; }
-        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 100%; max-width: 280px; box-sizing: border-box; }
+        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 100%; max-width: 290px; box-sizing: border-box; }
         .modal-content h3 { margin-top: 0; color: #fff; font-size: 12px; margin-bottom: 8px; border-bottom: 1px solid #30363d; padding-bottom: 4px; }
-        .modal-content input { width: 93%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; }
+        .modal-content input { width: 100%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; box-sizing: border-box; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
 
-        /* Mahnı Sözləri üçün Xüsusi Skrol Sahəsi */
-        .lyrics-text { font-size: 11px; color: #c9d1d9; max-height: 250px; overflow-y: auto; white-space: pre-wrap; background: #0d1117; padding: 8px; border-radius: 4px; border: 1px solid #30363d; line-height: 1.5; text-align: center; }
+        .lyrics-text { font-size: 11px; color: #c9d1d9; max-height: 230px; overflow-y: auto; white-space: pre-wrap; background: #0d1117; padding: 8px; border-radius: 4px; border: 1px solid #30363d; line-height: 1.5; text-align: center; }
 
-        /* Skrol dizaynı */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
@@ -80,7 +77,7 @@
         </div>
         <div style="display: flex; gap: 4px;">
             <form action="/search" method="GET" class="search-form">
-                <input type="text" name="search" value="<%= searchWord %>" placeholder="Artist adı..." autocomplete="off">
+                <input type="text" name="search" value="<%= searchWord %>" placeholder="Artist və ya mahnı..." autocomplete="off">
                 <button type="submit">Ara</button>
             </form>
             <button class="btn-add" onclick="openModal('addModal')">+ Əlavə Et</button>
@@ -88,12 +85,11 @@
     </div>
 
     <div class="main-container">
-        
         <div class="panel-box left-box">
             <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
             <div class="artist-grid">
                 <% artists.forEach(art => { %>
-                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist === art.name ? 'active' : '' %>">
+                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist.toLowerCase() === art.name.toLowerCase() ? 'active' : '' %>">
                         <span class="artist-name"><%= art.name %></span>
                         <span class="artist-count">🎵 <%= art.count %> mahnı</span>
                     </a>
@@ -104,31 +100,31 @@
         <div class="panel-box right-box">
             <% if (selectedArtist) { %>
                 <div class="section-title" style="color: #fff; border-bottom: 1px solid #21262d; padding-bottom: 4px; margin-bottom: 8px;">
-                    <span>🔥 <%= selectedArtist %> (<%= artistSongs.length %>)</span>
+                    <span>🔍 Nəticələr: <%= selectedArtist %> (<%= artistSongs.length %>)</span>
                 </div>
                 
                 <div class="song-container">
                     <% if (artistSongs.length > 0) { %>
                         <% artistSongs.forEach(song => { %>
-                            <div class="song-card" onclick="viewLyrics('<%= encodeURIComponent(song.song) %>', '<%= encodeURIComponent(song.artist) %>', '<%= encodeURIComponent(song.lyrics || '') %>')">
-                                <div>
+                            <div class="song-card">
+                                <div class="song-info-click" onclick="viewLyrics('<%= encodeURIComponent(song.song) %>', '<%= encodeURIComponent(song.artist) %>', '<%= encodeURIComponent(song.lyrics || '') %>')">
                                     <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
                                     <div class="song-artist">🎤 <%= song.artist %></div>
+                                    <div class="song-hashtag" title="<%= song.hashtag %>"><%= song.hashtag || '#yoxdur' %></div>
                                 </div>
-                                <div class="song-hashtag" title="<%= song.hashtag %>"><%= song.hashtag || '#yoxdur' %></div>
+                                <button class="btn-edit-trigger" onclick="openEditModal('<%= song.id %>', '<%= encodeURIComponent(song.artist) %>', '<%= encodeURIComponent(song.song) %>', '<%= encodeURIComponent(song.hashtag || '') %>', '<%= encodeURIComponent(song.lyrics || '') %>')">✏️</button>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Bu artistə aid mahnı tapılmadı.</div>
+                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Mahnı tapılmadı.</div>
                     <% } %>
                 </div>
             <% } else { %>
                 <div style="color: #8b949e; text-align: center; padding-top: 60px; font-size: 11px;">
-                    Siyahıdan bir artist seçin və ya yuxarıdan axtarış edin.
+                    Müğənni/mahnı seçin və ya yuxarıdan axtarış edin.
                 </div>
             <% } %>
         </div>
-
     </div>
 
     <div id="addModal" class="modal">
@@ -137,11 +133,28 @@
             <form action="/add-song" method="POST">
                 <input type="text" name="artist" placeholder="Müğənni adı" required>
                 <input type="text" name="song" placeholder="Mahnı adı" required>
-                <input type="text" name="hashtag" placeholder="#hashtag #lar">
-                <textarea name="lyrics" placeholder="Mahnının sözlərini bura yazın (İstəyə bağlı)..."></textarea>
+                <input type="text" name="hashtag" placeholder="#hashtag">
+                <textarea name="lyrics" placeholder="Mahnı sözləri..."></textarea>
                 <div class="modal-actions">
                     <button type="button" style="background: #da3637;" onclick="closeModal('addModal')">Ləğv et</button>
                     <button type="submit">Yadda saxla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>✏️ Mahnını Redaktə Et</h3>
+            <form action="/edit-song" method="POST">
+                <input type="hidden" name="id" id="editId">
+                <input type="text" name="artist" id="editArtist" placeholder="Müğənni adı" required>
+                <input type="text" name="song" id="editSong" placeholder="Mahnı adı" required>
+                <input type="text" name="hashtag" id="editHashtag" placeholder="#hashtag">
+                <textarea name="lyrics" id="editLyrics" placeholder="Mahnı sözləri..."></textarea>
+                <div class="modal-actions">
+                    <button type="button" style="background: #da3637;" onclick="closeModal('editModal')">Ləğv et</button>
+                    <button type="submit" style="background: var(--green);">Yenilə</button>
                 </div>
             </form>
         </div>
@@ -161,21 +174,21 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Mahnı sözlərini popapda göstərən funksiya
         function viewLyrics(song, artist, lyrics) {
-            const decodedSong = decodeURIComponent(song);
-            const decodedArtist = decodeURIComponent(artist);
-            const decodedLyrics = decodeURIComponent(lyrics);
-
-            document.getElementById('lyricsTitle').innerText = decodedArtist + " - " + decodedSong;
-            
-            if(decodedLyrics && decodedLyrics.trim() !== "") {
-                document.getElementById('lyricsBody').innerText = decodedLyrics;
-            } else {
-                document.getElementById('lyricsBody').innerHTML = "<i style='color:#8b949e;'>Bu mahnının sözləri hələ əlavə edilməyib.</i>";
-            }
-            
+            document.getElementById('lyricsTitle').innerText = decodeURIComponent(artist) + " - " + decodeURIComponent(song);
+            const decLyrics = decodeURIComponent(lyrics).trim();
+            document.getElementById('lyricsBody').innerText = decLyrics !== "" ? decLyrics : "Sözlər əlavə edilməyib.";
             openModal('lyricsModal');
+        }
+
+        // Edit formunu mövcud datalarla dolduran funksiya
+        function openEditModal(id, artist, song, hashtag, lyrics) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editArtist').value = decodeURIComponent(artist);
+            document.getElementById('editSong').value = decodeURIComponent(song);
+            document.getElementById('editHashtag').value = decodeURIComponent(hashtag);
+            document.getElementById('editLyrics').value = decodeURIComponent(lyrics);
+            openModal('editModal');
         }
     </script>
 </body>
