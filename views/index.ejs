@@ -23,24 +23,38 @@
         .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
         .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Artist Siyahısı */
+        /* Artist Siyahısı və Aktivlik Nöqtələri */
         .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 4px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
-        .artist-card { background: #161b22; border: 1px solid #21262d; padding: 5px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 34px; transition: 0.15s; box-sizing: border-box; }
+        .artist-card { background: #161b22; border: 1px solid #21262d; padding: 5px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 34px; transition: 0.15s; box-sizing: border-box; position: relative; }
         .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
-        .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 85%; }
         .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
+        
+        /* GitHub Stilində Aktivlik Nöqtəsi */
+        .activity-dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: #161b22; }
+        .dot-low { background: #0e4429; }      /* 1-2 mahnı (Tünd yaşıl) */
+        .dot-medium { background: #006d32; }   /* 3-5 mahnı (Orta yaşıl) */
+        .dot-high { background: #26a641; }     /* 6-10 mahnı (Parlaq yaşıl) */
+        .dot-viral { background: #39d353; box-shadow: 0 0 4px #39d353; } /* 10+ mahnı (Super trend) */
 
         /* Mahnı Kartları */
-        .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
-        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 52px; position: relative; }
-        .song-info-click { cursor: pointer; flex-grow: 1; width: 85%; }
+        .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 77vh; overflow-y: auto; padding-right: 4px; }
+        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 52px; position: relative; transition: opacity 0.15s; }
+        .song-info-click { cursor: pointer; flex-grow: 1; width: 80%; }
         .song-title { font-size: 11px; font-weight: bold; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
         .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
-        /* Kompakt Edit Düyməsi */
-        .btn-edit-trigger { position: absolute; top: 6px; right: 6px; background: rgba(48, 54, 61, 0.6); border: 1px solid #30363d; border-radius: 4px; padding: 2px 5px; font-size: 10px; color: #8b949e; cursor: pointer; z-index: 5; transition: 0.15s; }
-        .btn-edit-trigger:hover { color: var(--accent); border-color: var(--accent); background: #161b22; }
+        /* Sağ Üst Kompakt Düymələr */
+        .card-actions-wrapper { position: absolute; top: 4px; right: 4px; display: flex; gap: 3px; z-index: 5; }
+        .btn-mini { background: rgba(48, 54, 61, 0.6); border: 1px solid #30363d; border-radius: 4px; padding: 2px 4px; font-size: 9px; color: #8b949e; cursor: pointer; transition: 0.15s; }
+        .btn-mini:hover { color: #fff; background: #161b22; }
+        .btn-mini.edit:hover { color: var(--accent); border-color: var(--accent); }
+        .btn-mini.copy:hover { color: var(--green); border-color: var(--green); }
+
+        /* Anlıq Filtr İonputu */
+        .live-filter-box { width: 100%; margin-bottom: 8px; background: #0d1117; border: 1px solid #30363d; padding: 5px 8px; font-size: 11px; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        .live-filter-box::placeholder { color: #8b949e; font-style: italic; }
 
         /* Modallar */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; padding: 10px; box-sizing: border-box; }
@@ -55,7 +69,9 @@
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
 
-        /* Responsive */
+        /* Notification Toast */
+        .toast { position: fixed; bottom: 15px; right: 15px; background: var(--green); color: white; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; display: none; z-index: 200; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
         @media (min-width: 768px) {
             .main-container { grid-template-columns: 360px 1fr; align-items: start; }
             .left-box, .right-box { display: block !important; }
@@ -76,6 +92,8 @@
 </head>
 <body>
 
+    <div id="toastNotification" class="toast">📋 Mahnı sözləri və hashtag kopyalandı!</div>
+
     <div class="navbar">
         <div style="display: flex; align-items: center;">
             <a href="/" class="btn-back">⬅ Geri</a>
@@ -95,10 +113,16 @@
         <div class="panel-box left-box">
             <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
             <div class="artist-grid">
-                <% artists.forEach(art => { %>
+                <% artists.forEach(art => { 
+                    let dotClass = 'dot-low';
+                    if (art.count >= 10) { dotClass = 'dot-viral'; }
+                    else if (art.count >= 6) { dotClass = 'dot-high'; }
+                    else if (art.count >= 3) { dotClass = 'dot-medium'; }
+                %>
                     <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist.toLowerCase() === art.name.toLowerCase() ? 'active' : '' %>">
                         <span class="artist-name"><%= art.name %></span>
                         <span class="artist-count">🎵 <%= art.count %> mahnı</span>
+                        <div class="activity-dot <%= dotClass %>" title="<%= art.count %> mahnı"></div>
                     </a>
                 <% }) %>
             </div>
@@ -106,27 +130,28 @@
 
         <div class="panel-box right-box">
             <% if (selectedArtist) { %>
-                <div class="section-title" style="color: #fff; border-bottom: 1px solid #21262d; padding-bottom: 4px; margin-bottom: 8px;">
-                    <span>🔍 Nəticələr: <%= selectedArtist %> (<%= artistSongs.length %>)</span>
+                <div class="section-title" style="color: #fff; border-bottom: 1px solid #21262d; padding-bottom: 4px; margin-bottom: 6px;">
+                    <span>🔍 Nəticələr: <%= selectedArtist %> (<span id="visibleCount"><%= artistSongs.length %></span>)</span>
                 </div>
                 
-                <div class="song-container">
+                <input type="text" id="liveSearchInput" class="live-filter-box" placeholder="Bu siyahıda anlıq axtar (mahnı adı və ya hashtag)..." oninput="filterSongs()" autocomplete="off">
+
+                <div class="song-container" id="songContainer">
                     <% if (artistSongs.length > 0) { %>
                         <% artistSongs.forEach(song => { %>
-                            <div class="song-card" 
-                                 data-id="<%= song.id %>"
-                                 data-artist="<%= song.artist %>"
-                                 data-song="<%= song.song %>"
-                                 data-hashtag="<%= song.hashtag || '' %>"
-                                 data-lyrics="<%= song.lyrics || '' %>">
+                            <div class="song-card" data-song-id="<%= song.id %>">
                                 
-                                <div class="song-info-click" onclick="viewLyricsFromCard(this)">
+                                <div class="song-info-click" onclick="viewLyrics('<%= song.id %>')">
                                     <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
                                     <div class="song-artist">🎤 <%= song.artist %></div>
                                     <div class="song-hashtag" title="<%= song.hashtag %>"><%= song.hashtag || '#yoxdur' %></div>
                                 </div>
                                 
-                                <button class="btn-edit-trigger" onclick="openEditModalFromCard(this)">✏️</button>
+                                <div class="card-actions-wrapper">
+                                    <button class="btn-mini copy" onclick="copyLyricsFromCard('<%= song.id %>')" title="Sözləri sürətli kopyala">📋</button>
+                                    <button class="btn-mini edit" onclick="openEditModal('<%= song.id %>')" title="Redaktə et və ya sil">✏️</button>
+                                </div>
+                                
                             </div>
                         <% }) %>
                     <% } else { %>
@@ -195,43 +220,89 @@
     </div>
 
     <script>
+        // Təhlükəsiz massiv
+        const clientSongsArray = <%- JSON.stringify(artistSongs) %>;
+
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Kartın daxilindən mətni təmiz və zəmanətli oxuyan Lyrics funksiyası
-        function viewLyricsFromCard(element) {
-            const card = element.closest('.song-card');
-            const artist = card.getAttribute('data-artist');
-            const song = card.getAttribute('data-song');
-            const lyrics = card.getAttribute('data-lyrics').trim();
-
-            document.getElementById('lyricsTitle').innerText = artist + " - " + song;
-            document.getElementById('lyricsBody').innerText = lyrics !== "" ? lyrics : "Sözlər əlavə edilməyib.";
-            openModal('lyricsModal');
+        // Sözləri ekranda göstərmək
+        function viewLyrics(songId) {
+            const found = clientSongsArray.find(s => String(s.id) === String(songId));
+            if(found) {
+                document.getElementById('lyricsTitle').innerText = found.artist + " - " + found.song;
+                document.getElementById('lyricsBody').innerText = found.lyrics && found.lyrics.trim() !== "" ? found.lyrics.trim() : "Sözlər əlavə edilməyib.";
+                openModal('lyricsModal');
+            }
         }
 
-        // Kartın daxilindən ID-ni STRING kimi alan və qətiyyən xarab etməyən Edit açma funksiyası
-        function openEditModalFromCard(element) {
-            const card = element.closest('.song-card');
-            
-            // ID-ni string kimi oxuyuruq, yuvarlaqlaşma baş vermir!
-            const id = card.getAttribute('data-id');
-            const artist = card.getAttribute('data-artist');
-            const song = card.getAttribute('data-song');
-            const hashtag = card.getAttribute('data-hashtag');
-            const lyrics = card.getAttribute('data-lyrics');
+        // Redaktə modalını açmaq
+        function openEditModal(songId) {
+            const found = clientSongsArray.find(s => String(s.id) === String(songId));
+            if(found) {
+                document.getElementById('editId').value = found.id;
+                document.getElementById('editArtist').value = found.artist || '';
+                document.getElementById('editSong').value = found.song || '';
+                document.getElementById('editHashtag').value = found.hashtag || '';
+                document.getElementById('editLyrics').value = found.lyrics || '';
 
-            document.getElementById('editId').value = id;
-            document.getElementById('editArtist').value = artist;
-            document.getElementById('editSong').value = song;
-            document.getElementById('editHashtag').value = hashtag;
-            document.getElementById('editLyrics').value = lyrics;
+                document.getElementById('deleteId').value = found.id;
+                document.getElementById('deleteArtist').value = found.artist || '';
 
-            // Silmə formunun dataları
-            document.getElementById('deleteId').value = id;
-            document.getElementById('deleteArtist').value = artist;
+                openModal('editModal');
+            }
+        }
 
-            openModal('editModal');
+        // YENİ: Düyməyə basanda sözləri və hashtagı saniyəsində kopyalayan funksiya
+        function copyLyricsFromCard(songId) {
+            const found = clientSongsArray.find(s => String(s.id) === String(songId));
+            if(found) {
+                const hashtags = found.hashtag ? found.hashtag.trim() : '';
+                const lyrics = found.lyrics ? found.lyrics.trim() : '';
+                
+                // Kopyalanacaq mətni formalaşdırırıq
+                const fullText = (lyrics + "\n\n" + hashtags).trim();
+                
+                if (fullText !== "") {
+                    navigator.clipboard.writeText(fullText).then(() => {
+                        // Toast bildirişini göstər
+                        const toast = document.getElementById('toastNotification');
+                        toast.style.display = 'block';
+                        setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                    }).catch(err => {
+                        console.error('Kopyalama xətası:', err);
+                    });
+                }
+            }
+        }
+
+        // YENİ: Səhifəni yeniləmədən sağ paneldə anlıq axtarış funksiyası (Live Filter)
+        function filterSongs() {
+            const query = document.getElementById('liveSearchInput').value.toLowerCase().trim();
+            const songCards = document.querySelectorAll('.song-container .song-card');
+            let visibleCounter = 0;
+
+            songCards.forEach(card => {
+                const songId = card.getAttribute('data-song-id');
+                const found = clientSongsArray.find(s => String(s.id) === String(songId));
+                
+                if(found) {
+                    const songName = (found.song || '').toLowerCase();
+                    const hashtag = (found.hashtag || '').toLowerCase();
+                    
+                    // Mahnı adı və ya hashtag uyğun gəlirsə göstər, gəlmirsə gizlə
+                    if(songName.includes(query) || hashtag.includes(query)) {
+                        card.style.display = 'flex';
+                        visibleCounter++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+
+            // Başlıqdakı mahnı sayını anlıq yeniləyirik
+            const countElem = document.getElementById('visibleCount');
+            if(countElem) countElem.innerText = visibleCounter;
         }
     </script>
 </body>
