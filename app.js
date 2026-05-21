@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə
+// 1. Ana Səhifə (Sıralama Çoxdan Aza)
 app.get('/', async (req, res) => {
     try {
         const { data: songs, error } = await supabase.from('songs').select('*');
@@ -26,8 +26,9 @@ app.get('/', async (req, res) => {
             });
         }
         
+        // MAHNILARIN SAYINA GÖRƏ ÇOXDAN AZA SIRALAMA
         const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
-        // EJS partlamasın deyə selectedArtist-ə null yox, boş string veririk
+        
         res.render('index', { artists, selectedArtist: '', artistSongs: [], searchWord: '' });
     } catch (err) {
         console.error("Ana səhifə xətası:", err);
@@ -35,12 +36,11 @@ app.get('/', async (req, res) => {
     }
 });
 
-// 2. Klikləmə və Axtarış (Kritik massiv xətası düzəldildi)
+// 2. Klikləmə və Axtarış (Sıralama Burada da Tam Sabitləndi)
 app.get('/search', async (req, res) => {
     try {
         const searchWord = (req.query.search || '').trim();
         
-        // Bütün artist siyahısını yenidən çəkirik
         const { data: songs } = await supabase.from('songs').select('*');
         let artistMap = {};
         if (songs) {
@@ -52,25 +52,23 @@ app.get('/search', async (req, res) => {
                 }
             });
         }
+        
+        // SEÇİMDƏN SONRA DA SIRALAMANIN POZULMAMASI ÜÇÜN BURA DA ƏLAVƏ EDİLDİ
         const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
 
         let artistSongs = [];
         let selectedArtist = "";
 
         if (searchWord) {
-            // 1. Tam bərabərliyi yoxlayırıq
             const { data: exactData } = await supabase.from('songs').select('*').ilike('artist', searchWord);
             
             if (exactData && exactData.length > 0) {
                 artistSongs = exactData;
-                // XƏTA BURADA İDİ: massivin-cı elementindən datanı oxuyuruq
                 selectedArtist = exactData.artist ? exactData.artist.trim() : searchWord;
             } else {
-                // 2. Tam eşləşməzsə, daxilində keçənləri axtarırıq
                 const { data: likeData } = await supabase.from('songs').select('*').ilike('artist', `%${searchWord}%`);
                 if (likeData && likeData.length > 0) {
                     artistSongs = likeData;
-                    // XƏTA BURADA İDİ: massivin-cı elementindən datanı oxuyuruq
                     selectedArtist = likeData.artist ? likeData.artist.trim() : searchWord;
                 }
             }
