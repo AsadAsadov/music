@@ -3,7 +3,6 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Supabase Bağlantısı
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 app.set('view engine', 'ejs');
@@ -25,18 +24,15 @@ app.get('/', async (req, res) => {
                 }
             });
         }
-        
-        // MAHNILARIN SAYINA GÖRƏ ÇOXDAN AZA SIRALAMA
         const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
-        
         res.render('index', { artists, selectedArtist: '', artistSongs: [], searchWord: '' });
     } catch (err) {
-        console.error("Ana səhifə xətası:", err);
+        console.error(err);
         res.status(500).send("Daxili Server Xətası");
     }
 });
 
-// 2. Klikləmə və Axtarış (Sıralama Burada da Tam Sabitləndi)
+// 2. Klikləmə və Genişləndirilmiş Axtarış (Həm Artist, həm Mahnı adına görə)
 app.get('/search', async (req, res) => {
     try {
         const searchWord = (req.query.search || '').trim();
@@ -52,25 +48,22 @@ app.get('/search', async (req, res) => {
                 }
             });
         }
-        
-        // SEÇİMDƏN SONRA DA SIRALAMANIN POZULMAMASI ÜÇÜN BURA DA ƏLAVƏ EDİLDİ
         const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
 
         let artistSongs = [];
         let selectedArtist = "";
 
         if (searchWord) {
-            const { data: exactData } = await supabase.from('songs').select('*').ilike('artist', searchWord);
-            
-            if (exactData && exactData.length > 0) {
-                artistSongs = exactData;
-                selectedArtist = exactData.artist ? exactData.artist.trim() : searchWord;
-            } else {
-                const { data: likeData } = await supabase.from('songs').select('*').ilike('artist', `%${searchWord}%`);
-                if (likeData && likeData.length > 0) {
-                    artistSongs = likeData;
-                    selectedArtist = likeData.artist ? likeData.artist.trim() : searchWord;
-                }
+            // Ağıllı Axtarış: Eyni anda həm artist adında, həm də mahnı adında axtarırıq
+            const { data: foundSongs } = await supabase
+                .from('songs')
+                .select('*')
+                .or(`artist.ilike.%${searchWord}%,song.ilike.%${searchWord}%`);
+
+            if (foundSongs && foundSongs.length > 0) {
+                artistSongs = foundSongs;
+                // Əgər tapılan ilk mahnının artisti axtarılan sözlə uyğunlaşırsa, sol tərəfdə aktiv edirik
+                selectedArtist = foundSongs.artist ? foundSongs.artist.trim() : searchWord;
             }
         }
 
@@ -80,12 +73,12 @@ app.get('/search', async (req, res) => {
 
         res.render('index', { artists, selectedArtist, artistSongs, searchWord });
     } catch (err) {
-        console.error("Axtarış xətası:", err);
-        res.status(500).send("Axtarış zamanı xəta baş verdi");
+        console.error(err);
+        res.status(500).send("Axtarış xətası baş verdi");
     }
 });
 
-// 3. Yeni Mahnı Əlavə Etmə (Lyrics dəstəyi ilə)
+// 3. Yeni Mahnı Əlavə Etmə
 app.post('/add-song', async (req, res) => {
     try {
         const { artist, song, hashtag, lyrics } = req.body;
@@ -94,13 +87,36 @@ app.post('/add-song', async (req, res) => {
                 artist: artist.trim(), 
                 song: song.trim(), 
                 hashtag: hashtag ? hashtag.trim() : null,
-                lyrics: lyrics ? lyrics.trim() : null // Yeni əlavə olunan sütun
+                lyrics: lyrics ? lyrics.trim() : null
             }]);
         }
         res.redirect('/');
     } catch (err) {
-        console.error("Mahnı əlavə etmə xətası:", err);
-        res.status(500).send("Mahnı əlavə edilə bilmədi");
+        console.error(err);
+        res.status(500).send("Xəta baş verdi");
+    }
+});
+
+// 4. Mövcud Mahnını Redaktə Etmə (Yeni Sektor)
+app.post('/edit-song', async (req, res) => {
+    try {
+        const { id, artist, song, hashtag, lyrics } = req.body;
+        if (id && artist && song) {
+            await supabase
+                .from('songs')
+                .update({
+                    artist: artist.trim(),
+                    song: song.trim(),
+                    hashtag: hashtag ? hashtag.trim() : null,
+                    lyrics: lyrics ? lyrics.trim() : null
+                })
+                .eq('id', id); // Yalnız kliklənən mahnının ID-sinə görə yeniləyir
+        }
+        // Redaktədən sonra istifadəçi vizual olaraq itməsin deyə həmin artistin səhifəsinə geri yönləndiririk
+        res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Yenilənmə zamanı xəta baş verdi");
     }
 });
 
