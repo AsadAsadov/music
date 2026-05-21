@@ -3,8 +3,8 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Supabase Bağlantısı (Render ENV-dən oxunacaq)
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+// Supabase Bağlantısı (Service_role açarı ilə admin statusunda bağlanır)
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
