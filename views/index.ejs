@@ -8,6 +8,7 @@
         :root { --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.8); --text: #c9d1d9; --accent: #58a6ff; --green: #2ea44f; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; font-size: 11px; }
         
+        /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 6px 12px; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 8px; }
         .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .search-form { display: flex; gap: 4px; }
@@ -17,16 +18,19 @@
         .btn-add { background: var(--green); }
         .btn-back { background: #21262d; border: 1px solid #30363d; color: var(--text); text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: none; }
 
+        /* Grid Layout */
         .main-container { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
         .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
 
+        /* Artist Siyahısı */
         .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 4px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
         .artist-card { background: #161b22; border: 1px solid #21262d; padding: 5px 6px; border-radius: 4px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; justify-content: center; min-height: 34px; transition: 0.15s; box-sizing: border-box; }
         .artist-card:hover, .artist-card.active { border-color: var(--accent); background: #1f242c; }
         .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
 
+        /* Mahnı Kartları */
         .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
         .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 52px; position: relative; }
         .song-info-click { cursor: pointer; flex-grow: 1; width: 85%; }
@@ -34,22 +38,26 @@
         .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
         .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
-        /* Edit Düyməsi */
+        /* Kompakt Edit Düyməsi */
         .btn-edit-trigger { position: absolute; top: 6px; right: 6px; background: rgba(48, 54, 61, 0.6); border: 1px solid #30363d; border-radius: 4px; padding: 2px 5px; font-size: 10px; color: #8b949e; cursor: pointer; z-index: 5; transition: 0.15s; }
         .btn-edit-trigger:hover { color: var(--accent); border-color: var(--accent); background: #161b22; }
 
+        /* Modallar */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; padding: 10px; box-sizing: border-box; }
         .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 100%; max-width: 290px; box-sizing: border-box; }
         .modal-content h3 { margin-top: 0; color: #fff; font-size: 12px; margin-bottom: 8px; border-bottom: 1px solid #30363d; padding-bottom: 4px; }
         .modal-content input { width: 100%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; box-sizing: border-box; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
 
+        /* Daxili Skrollu Lyrics Sahəsi */
         .lyrics-text { font-size: 11px; color: #c9d1d9; max-height: 230px; overflow-y: auto; white-space: pre-wrap; background: #0d1117; padding: 8px; border-radius: 4px; border: 1px solid #30363d; line-height: 1.5; text-align: center; }
 
+        /* Skroll Bar Görünüşü */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
 
+        /* Responsive */
         @media (min-width: 768px) {
             .main-container { grid-template-columns: 360px 1fr; align-items: start; }
             .left-box, .right-box { display: block !important; }
@@ -85,6 +93,7 @@
     </div>
 
     <div class="main-container">
+        
         <div class="panel-box left-box">
             <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
             <div class="artist-grid">
@@ -116,7 +125,7 @@
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Mahnı tapılmadı.</div>
+                        <div style="color: #f85149; padding: 5px; grid-column: 1/-1;">Heç bir nəticə tapılmadı.</div>
                     <% } %>
                 </div>
             <% } else { %>
@@ -145,18 +154,28 @@
 
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h3>✏️ Mahnını Redaktə Et</h3>
-            <form action="/edit-song" method="POST">
+            <h3>✏️ Mahnını Redaktə Et / Sil</h3>
+            
+            <form action="/edit-song" method="POST" id="mainEditForm">
                 <input type="hidden" name="id" id="editId">
                 <input type="text" name="artist" id="editArtist" placeholder="Müğənni adı" required>
                 <input type="text" name="song" id="editSong" placeholder="Mahnı adı" required>
                 <input type="text" name="hashtag" id="editHashtag" placeholder="#hashtag">
                 <textarea name="lyrics" id="editLyrics" placeholder="Mahnı sözləri..."></textarea>
-                <div class="modal-actions">
-                    <button type="button" style="background: #da3637;" onclick="closeModal('editModal')">Ləğv et</button>
-                    <button type="submit" style="background: var(--green);">Yenilə</button>
-                </div>
             </form>
+
+            <div class="modal-actions" style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <form action="/delete-song" method="POST" onsubmit="return confirm('Bu mahnını silmək istədiyinizdən əminsiniz?');">
+                    <input type="hidden" name="id" id="deleteId">
+                    <input type="hidden" name="artist" id="deleteArtist">
+                    <button type="submit" style="background: #da3637;">🗑️ Sil</button>
+                </form>
+
+                <div style="display: flex; gap: 4px;">
+                    <button type="button" style="background: #21262d; border: 1px solid #30363d;" onclick="closeModal('editModal')">Geri</button>
+                    <button type="button" style="background: var(--green);" onclick="document.getElementById('mainEditForm').submit();">Yenilə</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -174,6 +193,7 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
+        // Sözləri ekranda göstərmək
         function viewLyrics(song, artist, lyrics) {
             document.getElementById('lyricsTitle').innerText = decodeURIComponent(artist) + " - " + decodeURIComponent(song);
             const decLyrics = decodeURIComponent(lyrics).trim();
@@ -181,13 +201,24 @@
             openModal('lyricsModal');
         }
 
-        // Edit formunu mövcud datalarla dolduran funksiya
+        // Redaktə inputlarını köhnə datalarla doldurmaq
         function openEditModal(id, artist, song, hashtag, lyrics) {
-            document.getElementById('editId').value = id;
-            document.getElementById('editArtist').value = decodeURIComponent(artist);
-            document.getElementById('editSong').value = decodeURIComponent(song);
-            document.getElementById('editHashtag').value = decodeURIComponent(hashtag);
-            document.getElementById('editLyrics').value = decodeURIComponent(lyrics);
+            const decId = id;
+            const decArtist = decodeURIComponent(artist);
+            const decSong = decodeURIComponent(song);
+            const decHashtag = decodeURIComponent(hashtag);
+            const decLyrics = decodeURIComponent(lyrics);
+
+            document.getElementById('editId').value = decId;
+            document.getElementById('editArtist').value = decArtist;
+            document.getElementById('editSong').value = decSong;
+            document.getElementById('editHashtag').value = decHashtag;
+            document.getElementById('editLyrics').value = decLyrics;
+
+            // Silmə formuna göndərilən datalar
+            document.getElementById('deleteId').value = decId;
+            document.getElementById('deleteArtist').value = decArtist;
+
             openModal('editModal');
         }
     </script>
