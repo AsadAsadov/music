@@ -85,15 +85,16 @@ app.get('/search', async (req, res) => {
     }
 });
 
-// 3. Yeni Mahnı Əlavə Etmə
+// 3. Yeni Mahnı Əlavə Etmə (Lyrics dəstəyi ilə)
 app.post('/add-song', async (req, res) => {
     try {
-        const { artist, song, hashtag } = req.body;
+        const { artist, song, hashtag, lyrics } = req.body;
         if (artist && song) {
             await supabase.from('songs').insert([{ 
                 artist: artist.trim(), 
                 song: song.trim(), 
-                hashtag: hashtag ? hashtag.trim() : null 
+                hashtag: hashtag ? hashtag.trim() : null,
+                lyrics: lyrics ? lyrics.trim() : null // Yeni əlavə olunan sütun
             }]);
         }
         res.redirect('/');
