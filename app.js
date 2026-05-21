@@ -97,13 +97,13 @@ app.post('/add-song', async (req, res) => {
     }
 });
 
-// 4. Mövcud Mahnını Redaktə Etmə (ID tipi Integer-ə çevrildi)
+// 4. Mövcud Mahnını Redaktə Etmə (Böyük ID problemi tam həll olundu)
 app.post('/edit-song', async (req, res) => {
     try {
         const { id, artist, song, hashtag, lyrics } = req.body;
         if (id && artist && song) {
-            const songId = parseInt(id, 10); // Supabase int8 üçün mütləq rəqəm edilməlidir
-
+            
+            // parseInt YOX, birbaşa String olaraq göndərilir, Supabase BigInt-i özü tanıyacaq
             await supabase
                 .from('songs')
                 .update({
@@ -112,7 +112,7 @@ app.post('/edit-song', async (req, res) => {
                     hashtag: hashtag ? hashtag.trim() : null,
                     lyrics: lyrics ? lyrics.trim() : null
                 })
-                .eq('id', songId); 
+                .eq('id', id); // id dəyişəni birbaşa string kimi gedir
         }
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
@@ -121,17 +121,17 @@ app.post('/edit-song', async (req, res) => {
     }
 });
 
-// 5. Mahnını Tamamilə Silmə
+// 5. Mahnını Tamamilə Silmə (Böyük ID problemi tam həll olundu)
 app.post('/delete-song', async (req, res) => {
     try {
         const { id, artist } = req.body;
         if (id) {
-            const songId = parseInt(id, 10);
             
+            // Burada da string kimi saxlayırıq ki JavaScript rəqəmi xarab etməsin
             await supabase
                 .from('songs')
                 .delete()
-                .eq('id', songId);
+                .eq('id', id);
         }
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
