@@ -3,13 +3,14 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Supabase Bağlantısı
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə (Sıralama Çoxdan Aza)
+// 1. Ana Səhifə (Artistlər Mahnı Sayına Görə Çoxdan Aza Sıralanır)
 app.get('/', async (req, res) => {
     try {
         const { data: songs, error } = await supabase.from('songs').select('*');
@@ -27,7 +28,7 @@ app.get('/', async (req, res) => {
         const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
         res.render('index', { artists, selectedArtist: '', artistSongs: [], searchWord: '' });
     } catch (err) {
-        console.error(err);
+        console.error("Ana səhifə xətası:", err);
         res.status(500).send("Daxili Server Xətası");
     }
 });
@@ -62,7 +63,6 @@ app.get('/search', async (req, res) => {
 
             if (foundSongs && foundSongs.length > 0) {
                 artistSongs = foundSongs;
-                // Əgər tapılan ilk mahnının artisti axtarılan sözlə uyğunlaşırsa, sol tərəfdə aktiv edirik
                 selectedArtist = foundSongs.artist ? foundSongs.artist.trim() : searchWord;
             }
         }
@@ -73,8 +73,8 @@ app.get('/search', async (req, res) => {
 
         res.render('index', { artists, selectedArtist, artistSongs, searchWord });
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Axtarış xətası baş verdi");
+        console.error("Axtarış xətası:", err);
+        res.status(500).send("Axtarış zamanı xəta baş verdi");
     }
 });
 
@@ -92,16 +92,18 @@ app.post('/add-song', async (req, res) => {
         }
         res.redirect('/');
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Xəta baş verdi");
+        console.error("Mahnı əlavə etmə xətası:", err);
+        res.status(500).send("Mahnı əlavə edilə bilmədi");
     }
 });
 
-// 4. Mövcud Mahnını Redaktə Etmə (Yeni Sektor)
+// 4. Mövcud Mahnını Redaktə Etmə (ID tipi Integer-ə çevrildi)
 app.post('/edit-song', async (req, res) => {
     try {
         const { id, artist, song, hashtag, lyrics } = req.body;
         if (id && artist && song) {
+            const songId = parseInt(id, 10); // Supabase int8 üçün mütləq rəqəm edilməlidir
+
             await supabase
                 .from('songs')
                 .update({
@@ -110,13 +112,31 @@ app.post('/edit-song', async (req, res) => {
                     hashtag: hashtag ? hashtag.trim() : null,
                     lyrics: lyrics ? lyrics.trim() : null
                 })
-                .eq('id', id); // Yalnız kliklənən mahnının ID-sinə görə yeniləyir
+                .eq('id', songId); 
         }
-        // Redaktədən sonra istifadəçi vizual olaraq itməsin deyə həmin artistin səhifəsinə geri yönləndiririk
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
-        console.error(err);
+        console.error("Redaktə xətası:", err);
         res.status(500).send("Yenilənmə zamanı xəta baş verdi");
+    }
+});
+
+// 5. Mahnını Tamamilə Silmə
+app.post('/delete-song', async (req, res) => {
+    try {
+        const { id, artist } = req.body;
+        if (id) {
+            const songId = parseInt(id, 10);
+            
+            await supabase
+                .from('songs')
+                .delete()
+                .eq('id', songId);
+        }
+        res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
+    } catch (err) {
+        console.error("Silmə xətası:", err);
+        res.status(500).send("Mahnı silinə bilmədi");
     }
 });
 
