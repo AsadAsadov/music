@@ -12,15 +12,15 @@
         .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 6px 12px; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 8px; }
         .brand { font-size: 12px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .search-form { display: flex; gap: 4px; }
-        input[type="text"] { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 4px 8px; font-size: 11px; border-radius: 4px; width: 130px; }
+        input[type="text"], textarea { background: #161b22; border: 1px solid #30363d; color: #fff; padding: 4px 8px; font-size: 11px; border-radius: 4px; width: 130px; box-sizing: border-box; }
+        textarea { width: 93%; height: 60px; resize: none; margin-bottom: 6px; font-family: inherit; }
         button { background: var(--accent); color: white; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-add { background: var(--green); }
         .btn-back { background: #21262d; border: 1px solid #30363d; color: var(--text); text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: none; }
 
-        /* Əsas Layout: Responsive 2 Sütun */
+        /* Əsas Layout */
         .main-container { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        
-        .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; box-sizing: border-radius; }
+        .panel-box { background: var(--card-bg); border: 1px solid #30363d; border-radius: 6px; padding: 8px; }
         .section-title { font-size: 11px; margin: 0 0 6px 0; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
 
         /* Artist Grid */
@@ -30,41 +30,40 @@
         .artist-name { font-weight: bold; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .artist-count { color: #8b949e; font-size: 9px; margin-top: 1px; }
 
-        /* Mahnı Kartları - Sıx Grid Sistemi */
+        /* Mahnı Kartları */
         .song-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 83vh; overflow-y: auto; padding-right: 4px; }
-        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 48px; }
+        .song-card { background: linear-gradient(145deg, #1f242c, #161b22); border: 1px solid #30363d; border-left: 3px solid var(--accent); padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 48px; cursor: pointer; transition: 0.2s; }
+        .song-card:hover { border-color: var(--accent); background: #1f242c; }
         .song-title { font-size: 11px; font-weight: bold; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .song-artist { color: #8b949e; font-size: 10px; margin-bottom: 4px; }
         .song-hashtag { color: #58a6ff; font-style: italic; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 240px; }
-        .modal-content h3 { margin-top: 0; color: #fff; font-size: 11px; margin-bottom: 8px; }
+        /* Modallar (Popup Box) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; padding: 10px; box-sizing: border-box; }
+        .modal-content { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; width: 100%; max-width: 280px; box-sizing: border-box; }
+        .modal-content h3 { margin-top: 0; color: #fff; font-size: 12px; margin-bottom: 8px; border-bottom: 1px solid #30363d; padding-bottom: 4px; }
         .modal-content input { width: 93%; margin-bottom: 6px; display: block; padding: 5px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 4px; font-size: 11px; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
+
+        /* Mahnı Sözləri üçün Xüsusi Skrol Sahəsi */
+        .lyrics-text { font-size: 11px; color: #c9d1d9; max-height: 250px; overflow-y: auto; white-space: pre-wrap; background: #0d1117; padding: 8px; border-radius: 4px; border: 1px solid #30363d; line-height: 1.5; text-align: center; }
 
         /* Skrol dizaynı */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
 
-        /* 🖥️ Ekran Böyük olanda (PC versiya) */
         @media (min-width: 768px) {
             .main-container { grid-template-columns: 360px 1fr; align-items: start; }
-            .left-box { display: block !important; }
-            .right-box { display: block !important; }
+            .left-box, .right-box { display: block !important; }
         }
-
-        /* 📱 Ekran Kiçik olanda (Mobil Uyumlu Adaptasiya) */
         @media (max-width: 767px) {
             input[type="text"] { width: 100px; }
-            .brand span { display: none; } /* Mobildə yazını gizlədirik, yalnız ikon qalır */
-            
+            .brand span { display: none; }
             <% if (selectedArtist) { %>
-                .left-box { display: none !important; } /* Artist seçilibsə sol paneli gizlət */
-                .right-box { display: block !important; } /* Yalnız sağ paneli göstər */
-                .btn-back { display: inline-block; margin-right: 6px; } /* Geri düyməsini aktiv et */
+                .left-box { display: none !important; }
+                .right-box { display: block !important; }
+                .btn-back { display: inline-block; margin-right: 6px; }
             <% } else { %>
                 .left-box { display: block !important; }
                 .right-box { display: none !important; }
@@ -84,7 +83,7 @@
                 <input type="text" name="search" value="<%= searchWord %>" placeholder="Artist adı..." autocomplete="off">
                 <button type="submit">Ara</button>
             </form>
-            <button class="btn-add" onclick="openModal()">+ Əlavə Et</button>
+            <button class="btn-add" onclick="openModal('addModal')">+ Əlavə Et</button>
         </div>
     </div>
 
@@ -94,7 +93,7 @@
             <div class="section-title">Bütün Artistlər (<%= artists.length %>)</div>
             <div class="artist-grid">
                 <% artists.forEach(art => { %>
-                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= (selectedArtist && selectedArtist.toLowerCase() === art.name.toLowerCase()) ? 'active' : '' %>">
+                    <a href="/search?search=<%= encodeURIComponent(art.name) %>" class="artist-card <%= selectedArtist === art.name ? 'active' : '' %>">
                         <span class="artist-name"><%= art.name %></span>
                         <span class="artist-count">🎵 <%= art.count %> mahnı</span>
                     </a>
@@ -111,7 +110,7 @@
                 <div class="song-container">
                     <% if (artistSongs.length > 0) { %>
                         <% artistSongs.forEach(song => { %>
-                            <div class="song-card">
+                            <div class="song-card" onclick="viewLyrics('<%= encodeURIComponent(song.song) %>', '<%= encodeURIComponent(song.artist) %>', '<%= encodeURIComponent(song.lyrics || '') %>')">
                                 <div>
                                     <div class="song-title" title="<%= song.song %>"><%= song.song %></div>
                                     <div class="song-artist">🎤 <%= song.artist %></div>
@@ -136,20 +135,48 @@
         <div class="modal-content">
             <h3>🎵 Yeni Mahnı Əlavə Et</h3>
             <form action="/add-song" method="POST">
-                <input type="text" name="artist" placeholder="Müğənni adı (Məs: Tarkan)" required>
+                <input type="text" name="artist" placeholder="Müğənni adı" required>
                 <input type="text" name="song" placeholder="Mahnı adı" required>
                 <input type="text" name="hashtag" placeholder="#hashtag #lar">
+                <textarea name="lyrics" placeholder="Mahnının sözlərini bura yazın (İstəyə bağlı)..."></textarea>
                 <div class="modal-actions">
-                    <button type="button" style="background: #da3637;" onclick="closeModal()">Ləğv et</button>
+                    <button type="button" style="background: #da3637;" onclick="closeModal('addModal')">Ləğv et</button>
                     <button type="submit">Yadda saxla</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <div id="lyricsModal" class="modal">
+        <div class="modal-content" style="max-width: 320px;">
+            <h3 id="lyricsTitle">Mahnı Sözləri</h3>
+            <div id="lyricsBody" class="lyrics-text"></div>
+            <div class="modal-actions">
+                <button type="button" style="background: #21262d; border: 1px solid #30363d;" onclick="closeModal('lyricsModal')">Bağla</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function openModal() { document.getElementById('addModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('addModal').style.display = 'none'; }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Mahnı sözlərini popapda göstərən funksiya
+        function viewLyrics(song, artist, lyrics) {
+            const decodedSong = decodeURIComponent(song);
+            const decodedArtist = decodeURIComponent(artist);
+            const decodedLyrics = decodeURIComponent(lyrics);
+
+            document.getElementById('lyricsTitle').innerText = decodedArtist + " - " + decodedSong;
+            
+            if(decodedLyrics && decodedLyrics.trim() !== "") {
+                document.getElementById('lyricsBody').innerText = decodedLyrics;
+            } else {
+                document.getElementById('lyricsBody').innerHTML = "<i style='color:#8b949e;'>Bu mahnının sözləri hələ əlavə edilməyib.</i>";
+            }
+            
+            openModal('lyricsModal');
+        }
     </script>
 </body>
 </html>
