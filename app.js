@@ -9,7 +9,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə (Bütün artistləri çəkirik)
+// 1. Ana Səhifə
 app.get('/', async (req, res) => {
     const { data: songs, error } = await supabase.from('songs').select('*');
     
@@ -17,50 +17,59 @@ app.get('/', async (req, res) => {
     if (!error && songs) {
         songs.forEach(s => {
             if(s.artist) {
-                let trimmed = s.artist.trim();
-                if (!artistMap[trimmed]) {
-                    artistMap[trimmed] = { name: trimmed, count: 0 };
-                }
-                artistMap[trimmed].count++;
+                let name = s.artist.trim();
+                if (!artistMap[name]) artistMap[name] = { name: name, count: 0 };
+                artistMap[name].count++;
             }
         });
     }
     
-    const artists = Object.values(artistMap);
+    const artists = Object.values(artistMap).sort((a, b) => b.count - a.count); // Ən çox mahnısı olanlar yuxarıda
     res.render('index', { artists, selectedArtist: null, artistSongs: [], searchWord: '' });
 });
 
-// 2. Klikləmə və ya Axtarış Marşrutu (Tam Düzəldilmiş Versiya)
+// 2. Klikləmə və Axtarış (Düzəldildi)
 app.get('/search', async (req, res) => {
     const searchWord = (req.query.search || '').trim();
     
-    // Bütün artist siyahısını yenidən hazırlayırıq
-    const { data: allSongs } = await supabase.from('songs').select('*');
+    // Bütün artist siyahısını yenidən çəkirik
+    const { data: songs } = await supabase.from('songs').select('*');
     let artistMap = {};
-    if (allSongs) {
-        allSongs.forEach(s => {
+    if (songs) {
+        songs.forEach(s => {
             if(s.artist) {
-                let trimmed = s.artist.trim();
-                if (!artistMap[trimmed]) artistMap[trimmed] = { name: trimmed, count: 0 };
-                artistMap[trimmed].count++;
+                let name = s.artist.trim();
+                if (!artistMap[name]) artistMap[name] = { name: name, count: 0 };
+                artistMap[name].count++;
             }
         });
     }
-    const artists = Object.values(artistMap);
+    const artists = Object.values(artistMap).sort((a, b) => b.count - a.count);
 
     let artistSongs = [];
+    let selectedArtist = null;
+
     if (searchWord) {
-        // İnsensitive axtarış: sözün daxilində keçənləri tapır
-        const { data } = await supabase
-            .from('songs')
-            .select('*')
-            .ilike('artist', `%${searchWord}%`);
+        // Həm tam bərabərlik, həm də daxilində keçmə ehtimalını yoxlayırıq
+        const { data: exactData } = await supabase.from('songs').select('*').ilike('artist', searchWord);
         
-        if (data) artistSongs = data;
+        if (exactData && exactData.length > 0) {
+            artistSongs = exactData;
+            selectedArtist = exactData.artist.trim();
+        } else {
+            // Tam eşləşməzsə, daxilində axtarış edirik
+            const { data: likeData } = await supabase.from('songs').select('*').ilike('artist', `%${searchWord}%`);
+            if (likeData && likeData.length > 0) {
+                artistSongs = likeData;
+                selectedArtist = likeData.artist.trim();
+            }
+        }
     }
 
-    // Əgər nəticə varsa, tapılan ilk artistin adını başlığa qoyuruq, yoxdursa yazılan sözü
-    const selectedArtist = artistSongs.length > 0 ? artistSongs.artist : searchWord;
+    // Əgər heç bir mahnı tapılmadısa, amma yenə də axtarış edilibsə
+    if (!selectedArtist && searchWord) {
+        selectedArtist = searchWord;
+    }
 
     res.render('index', { artists, selectedArtist, artistSongs, searchWord });
 });
@@ -69,7 +78,11 @@ app.get('/search', async (req, res) => {
 app.post('/add-song', async (req, res) => {
     const { artist, song, hashtag } = req.body;
     if (artist && song) {
-        await supabase.from('songs').insert([{ artist: artist.trim(), song: song.trim(), hashtag: hashtag ? hashtag.trim() : null }]);
+        await supabase.from('songs').insert([{ 
+            artist: artist.trim(), 
+            song: song.trim(), 
+            hashtag: hashtag ? hashtag.trim() : null 
+        }]);
     }
     res.redirect('/');
 });
