@@ -3,14 +3,13 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Supabase Bağlantısı
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə (Artistlər Mahnı Sayına Görə Çoxdan Aza Sıralanır)
+// 1. Ana Səhifə
 app.get('/', async (req, res) => {
     try {
         const { data: songs, error } = await supabase.from('songs').select('*');
@@ -33,7 +32,7 @@ app.get('/', async (req, res) => {
     }
 });
 
-// 2. Klikləmə və Genişləndirilmiş Axtarış (Həm Artist, həm Mahnı adına görə)
+// 2. Axtarış və Klikləmə
 app.get('/search', async (req, res) => {
     try {
         const searchWord = (req.query.search || '').trim();
@@ -55,7 +54,6 @@ app.get('/search', async (req, res) => {
         let selectedArtist = "";
 
         if (searchWord) {
-            // Ağıllı Axtarış: Eyni anda həm artist adında, həm də mahnı adında axtarırıq
             const { data: foundSongs } = await supabase
                 .from('songs')
                 .select('*')
@@ -97,13 +95,11 @@ app.post('/add-song', async (req, res) => {
     }
 });
 
-// 4. Mövcud Mahnını Redaktə Etmə (Böyük ID problemi tam həll olundu)
+// 4. Redaktə (ID birbaşa mətn kimi göndərilir - ZƏMANƏTLİ)
 app.post('/edit-song', async (req, res) => {
     try {
         const { id, artist, song, hashtag, lyrics } = req.body;
         if (id && artist && song) {
-            
-            // parseInt YOX, birbaşa String olaraq göndərilir, Supabase BigInt-i özü tanıyacaq
             await supabase
                 .from('songs')
                 .update({
@@ -112,7 +108,7 @@ app.post('/edit-song', async (req, res) => {
                     hashtag: hashtag ? hashtag.trim() : null,
                     lyrics: lyrics ? lyrics.trim() : null
                 })
-                .eq('id', id); // id dəyişəni birbaşa string kimi gedir
+                .eq('id', id); // Heç bir parseInt yoxdur, birbaşa string gedir
         }
         res.redirect(`/search?search=${encodeURIComponent(artist.trim())}`);
     } catch (err) {
@@ -121,13 +117,11 @@ app.post('/edit-song', async (req, res) => {
     }
 });
 
-// 5. Mahnını Tamamilə Silmə (Böyük ID problemi tam həll olundu)
+// 5. Silmə (ID birbaşa mətn kimi göndərilir - ZƏMANƏTLİ)
 app.post('/delete-song', async (req, res) => {
     try {
         const { id, artist } = req.body;
         if (id) {
-            
-            // Burada da string kimi saxlayırıq ki JavaScript rəqəmi xarab etməsin
             await supabase
                 .from('songs')
                 .delete()
