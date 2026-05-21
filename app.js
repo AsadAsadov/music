@@ -3,25 +3,26 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Supabase Bağlantısı (Service_role açarı ilə admin statusunda bağlanır)
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1. Ana Səhifə (Bütün artistlər və mahnı sayıları)
+// 1. Ana Səhifə (Bütün artistləri çəkirik)
 app.get('/', async (req, res) => {
-    // Supabase-dən bütün mahnıları çəkirik ki, artistləri qruplaşdıraq
     const { data: songs, error } = await supabase.from('songs').select('*');
     
     let artistMap = {};
     if (!error && songs) {
         songs.forEach(s => {
-            if (!artistMap[s.artist]) {
-                artistMap[s.artist] = { name: s.artist, count: 0 };
+            if(s.artist) {
+                let trimmed = s.artist.trim();
+                if (!artistMap[trimmed]) {
+                    artistMap[trimmed] = { name: trimmed, count: 0 };
+                }
+                artistMap[trimmed].count++;
             }
-            artistMap[s.artist].count++;
         });
     }
     
@@ -29,39 +30,46 @@ app.get('/', async (req, res) => {
     res.render('index', { artists, selectedArtist: null, artistSongs: [], searchWord: '' });
 });
 
-// 2. Artistə görə axtarış və ya klikləmə marşrutu
+// 2. Klikləmə və ya Axtarış Marşrutu (Tam Düzəldilmiş Versiya)
 app.get('/search', async (req, res) => {
-    const searchWord = req.query.search || '';
+    const searchWord = (req.query.search || '').trim();
     
-    // Əvvəlcə bütün artistləri yenə çəkirik (sol tərəf və ya ana menyu üçün)
+    // Bütün artist siyahısını yenidən hazırlayırıq
     const { data: allSongs } = await supabase.from('songs').select('*');
     let artistMap = {};
     if (allSongs) {
         allSongs.forEach(s => {
-            if (!artistMap[s.artist]) artistMap[s.artist] = { name: s.artist, count: 0 };
-            artistMap[s.artist].count++;
+            if(s.artist) {
+                let trimmed = s.artist.trim();
+                if (!artistMap[trimmed]) artistMap[trimmed] = { name: trimmed, count: 0 };
+                artistMap[trimmed].count++;
+            }
         });
     }
     const artists = Object.values(artistMap);
 
-    // İndi isə axtarılan artistin mahnılarını gətiririk
-    const { data: artistSongs } = await supabase
-        .from('songs')
-        .select('*')
-        .ilike('artist', `%${searchWord}%`);
+    let artistSongs = [];
+    if (searchWord) {
+        // İnsensitive axtarış: sözün daxilində keçənləri tapır
+        const { data } = await supabase
+            .from('songs')
+            .select('*')
+            .ilike('artist', `%${searchWord}%`);
+        
+        if (data) artistSongs = data;
+    }
 
-    // Əgər dəqiq bir artist tapılıbsa, onun adını başlığa qoyuruq
-    const selectedArtist = artistSongs && artistSongs.length > 0 ? artistSongs.artist : searchWord;
+    // Əgər nəticə varsa, tapılan ilk artistin adını başlığa qoyuruq, yoxdursa yazılan sözü
+    const selectedArtist = artistSongs.length > 0 ? artistSongs.artist : searchWord;
 
-    res.render('index', { artists, selectedArtist, artistSongs: artistSongs || [], searchWord });
+    res.render('index', { artists, selectedArtist, artistSongs, searchWord });
 });
 
-// 3. Yeni Mahnı Əlavə Etmə (POST)
+// 3. Yeni Mahnı Əlavə Etmə
 app.post('/add-song', async (req, res) => {
     const { artist, song, hashtag } = req.body;
-    
     if (artist && song) {
-        await supabase.from('songs').insert([{ artist, song, hashtag }]);
+        await supabase.from('songs').insert([{ artist: artist.trim(), song: song.trim(), hashtag: hashtag ? hashtag.trim() : null }]);
     }
     res.redirect('/');
 });
